@@ -40,6 +40,7 @@ HpPlot
 SSTPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = Mean_SST)) +
   geom_line(colour = "red") +
+  geom_smooth(method = "lm", se = FALSE, colour = "black") +
   xlab("Year") +
   ylab("Mean SST (°C)") +
   theme_classic()
