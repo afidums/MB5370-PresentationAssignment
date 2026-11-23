@@ -39,8 +39,7 @@ HpPlot
 #graph for average SST over years (including on months from July-october)
 SSTPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = Mean_SST)) +
-  geom_point(colour = "black") +
-  geom_smooth(method = "lm", colour= "red", se = FALSE)+
+  geom_line(colour = "red") +
   xlab("Year") +
   ylab("Mean SST (°C)") +
   theme_classic()
