@@ -3,6 +3,17 @@ title: "RCodePresentation"
 output: html_document
 date: "2026-11-22"
 ---
+```{r}
+#resetting the environment 
+rm(list = ls())
+#loading required packages 
+library(dplyr) #for dataframe editing
+library(ggplot2) #for making graphs
+library(patchwork) #for combing two graphs
+
+```
+
+
 
 ```{r}
 #reading the files 
@@ -10,7 +21,6 @@ Hp <- read.csv("Humpback.csv.csv")
 SST <- read.csv("SST_MB5370.csv.csv")
 
 #getting the number of unique humpbacks appearing every year 
-library(dplyr)
 
 Hp_year <- Hp %>%
   filter(!is.na(NOM.NAME)) %>% # removing NAs
@@ -27,7 +37,6 @@ Hp_SST <- Hp_year %>%
   left_join(SST, by = "ANNEE.YEAR")
 
 #graphing whales per year alongside average temperature per year of gulf
-library(ggplot2)
 HpPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = unique_whales)) +
   geom_col(fill = "blue") +
@@ -40,16 +49,15 @@ HpPlot
 SSTPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = Mean_SST)) +
   geom_line(colour = "red") +
-  geom_smooth(method = "lm", se = FALSE, colour = "black") +
+  geom_smooth(method = "lm", se = FALSE, colour = "black", linetype = "dashed") +
   xlab("Year") +
   ylab("Mean SST (°C)") +
   theme_classic()
 SSTPlot
 
 #adding the two graphs onto the same plot 
-library(patchwork)
 final_plot <- HpPlot / SSTPlot
 final_plot 
 #saving the graph
 ggsave("FinalPlot.jpg", plot=final_plot)
-  ```
+```
