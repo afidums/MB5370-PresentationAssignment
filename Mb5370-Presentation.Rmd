@@ -30,15 +30,17 @@ Hp_SST <- Hp_year %>%
 library(ggplot2)
 HpPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = unique_whales)) +
-  geom_col(fill = "grey") +
-  xlab("Year") +
-  ylab("Unique Whales")
+  geom_col(fill = "blue") +
+  xlab("") +
+  ylab("Unique Whales") + 
+  theme_classic()
 HpPlot
 
 #graph for average SST over years (including on months from July-october)
 SSTPlot <- 
   ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = Mean_SST)) +
-  geom_line(colour = "red") +
+  geom_point(colour = "black") +
+  geom_smooth(method = "lm", colour= "red", se = FALSE)+
   xlab("Year") +
   ylab("Mean SST (°C)") +
   theme_classic()
@@ -46,6 +48,8 @@ SSTPlot
 
 #adding the two graphs onto the same plot 
 library(patchwork)
-HpPlot / SSTPlot
-
-```
+final_plot <- HpPlot / SSTPlot
+final_plot 
+#saving the graph
+ggsave("FinalPlot.jpg", plot=final_plot)
+  ```
