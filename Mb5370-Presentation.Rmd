@@ -1,0 +1,51 @@
+---
+title: "RCodePresentation"
+output: html_document
+date: "2026-11-22"
+---
+
+```{r}
+#reading the files 
+Hp <- read.csv("Humpback.csv.csv")
+SST <- read.csv("SST_MB5370.csv.csv")
+
+#getting the number of unique humpbacks appearing every year 
+library(dplyr)
+
+Hp_year <- Hp %>%
+  filter(!is.na(NOM.NAME)) %>% # removing NAs
+  group_by(ANNEE.YEAR) %>% #grouping by year 
+  summarise(
+    unique_whales = n_distinct(NOM.NAME), #only keeping distinct whales 
+    .groups = "drop"
+  )
+
+Hp_year
+
+#joining the two datasets together 
+Hp_SST <- Hp_year %>%
+  left_join(SST, by = "ANNEE.YEAR")
+
+#graphing whales per year alongside average temperature per year of gulf
+library(ggplot2)
+HpPlot <- 
+  ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = unique_whales)) +
+  geom_col(fill = "grey") +
+  xlab("Year") +
+  ylab("Unique Whales")
+HpPlot
+
+#graph for average SST over years (including on months from July-october)
+SSTPlot <- 
+  ggplot(Hp_SST, aes(x = ANNEE.YEAR, y = Mean_SST)) +
+  geom_line(colour = "red") +
+  xlab("Year") +
+  ylab("Mean SST (°C)") +
+  theme_classic()
+SSTPlot
+
+#adding the two graphs onto the same plot 
+library(patchwork)
+HpPlot / SSTPlot
+
+```
